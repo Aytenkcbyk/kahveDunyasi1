@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import Giris from '~/components/TheGiris.vue';
 import Menu from '~/components/TheMenu.vue';
-import TheSepet from '~/components/TheSepet.vue';
+import Sepet from '~/components/Sepet.vue';
 import TheComp4 from '~/components/TheComp4.vue';
 import TheComp5 from '~/components/TheComp5.vue';
 import TheKoleksiyon from '../components/TheKoleksiyon.vue';
@@ -37,7 +37,7 @@ import { ref } from 'vue';
 const activeComponent = ref(0);
 const isNavOpen = ref(false); // Menü başlangıçta kapalı
 const buttons = Array.from({ length: 10 }, (_, i) => `Button ${i + 1}`);
-const components = [Giris, Menu, TheSepet,TheComp4,TheComp5,TheKoleksiyon,TheOzellikler,TheBlog,TheCookies,YeniUrunler ];
+const components = [Giris, Menu, Sepet,TheComp4,TheComp5,TheKoleksiyon,TheOzellikler,TheBlog,TheCookies,YeniUrunler ];
 
 const setActiveComponent = (index: number) => {
     console.log('Tıklanan buton:', index);
