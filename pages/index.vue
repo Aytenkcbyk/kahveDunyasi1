@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import Giris from '~/components/TheGiris.vue';
 import Menu from '~/components/TheMenu.vue';
-import Sepet from '~/components/Sepet.vue';
+import Sepet from '~/components/TheSepet.vue';
 import TheComp4 from '~/components/TheComp4.vue';
 import TheComp5 from '~/components/TheComp5.vue';
 import TheKoleksiyon from '../components/TheKoleksiyon.vue';
