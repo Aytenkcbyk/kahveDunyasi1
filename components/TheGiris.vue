@@ -27,30 +27,66 @@
                         Parolanızı mı Unuttunuz?
                     </nuxt-link>
                     <p>Hesabınız yok mu?
-                        <nuxt-link to="/register" class="register-link">Kayıt ol</nuxt-link>
+                        <nuxt-link to="#" @click="redirectToRegister" class="register-link">Kayıt ol</nuxt-link>
                     </p>
                 </div>
+                <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+                <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-export default {
-    data() {
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { auth } from '~/boot/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+
+export default defineComponent({
+    name: 'TheGiris',
+    setup() {
+        const email = ref('');
+        const password = ref('');
+        const remember = ref(false);
+        const router = useRouter();
+        const errorMessage = ref('');
+        const successMessage = ref('');
+
+        const login = async () => {
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
+                console.log('Giriş başarılı:', userCredential.user);
+                successMessage.value = 'Giriş başarılı! Yönlendiriliyorsunuz...';
+                errorMessage.value = '';
+                setTimeout(() => {
+                    router.push('/anasayfa');
+                }, 2000); // 2 saniye bekleyip yönlendirme yapar
+            } catch (error) {
+                console.error('Giriş hatası:', error);
+                successMessage.value = '';
+                errorMessage.value = 'Giriş başarısız. Kullanıcı adı veya şifre hatalı';
+                if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage.value = 'Kullanıcı bulunamadı veya şifre hatalı';
+                }
+            }
+        };
+
+        const redirectToRegister = () => {
+            router.push('/register');
+        };
+
         return {
-            email: '',
-            password: '',
+            email,
+            password,
+            remember,
+            login,
+            redirectToRegister,
+            errorMessage,
+            successMessage,
         };
     },
-    methods: {
-        login() {
-            // Giriş işlemini burada yapabilirsiniz
-            console.log('Email:', this.email);
-            console.log('Password:', this.password);
-        },
-    },
-};
+});
 </script>
 
 <style scoped>
@@ -81,15 +117,12 @@ export default {
     align-items: center;
     width: 100%;
     max-width: 400px;
-    /* Kutuyu biraz küçülttüm */
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     flex-direction: column;
-    /* Dikey hizalama */
     height: 500px;
-    /* Dikey olarak büyütme */
 }
 
 .login-card {
@@ -124,7 +157,6 @@ export default {
     margin-top: 15px;
     width: 100%;
     max-width: 280px;
-    /* Daha kısa yapıldı */
     padding: 10px;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -176,5 +208,17 @@ export default {
 .forgot-password:hover,
 .register-link:hover {
     text-decoration: underline;
+}
+
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.success-message {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
 }
 </style>
