@@ -1,89 +1,107 @@
 <template>
   <div class="carousel-container">
-    <div class="carousel" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-      <div class="carousel-slide" v-for="(slide, index) in slides" :key="index">
-        <div class="carousel-item">
-          <a :href="slide.link" target="_blank" rel="noopener noreferrer">
-            <img 
-              :src="slide.src" 
-              :alt="slide.alt" 
-              :title="slide.title" 
-              class="v-lazy-image v-lazy-image-loaded" 
-              :style="slide.style" 
-            />
-          </a>
+    <!-- Blog Başlığı -->
+    <h1 class="blog-title">Blog</h1>
+    <div class="carousel-wrapper" :style="{ transform: `translateX(-${currentIndex * (100 / 3)}%)` }">
+      <div
+        v-for="(blog, index) in blogs"
+        :key="index"
+        class="carousel-item"
+      >
+        <img :src="blog.imageUrl" :alt="blog.title" class="carousel-image" />
+        <div class="carousel-content">
+          <h3 class="carousel-title">{{ blog.title }}</h3>
+          <p class="carousel-description">{{ blog.description }}</p>
+          <a href="#" class="carousel-link">Detay</a>
         </div>
       </div>
     </div>
-
-    <!-- Controls -->
-    <div class="controls">
-      <button @click="prevSlide">←</button>
-      <button @click="nextSlide">→</button>
-    </div>
-
-    <!-- Navigation -->
-    <div class="navigation">
+    <div class="carousel-dots">
       <span
-        v-for="(slide, index) in slides"
+        v-for="(blog, index) in blogs"
         :key="index"
+        class="dot"
+        :class="{ active: currentIndex === index }"
         @click="goToSlide(index)"
-        :class="{ active: index === currentSlide }"
       ></span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 
 export default {
-  name: "TheBlog",
+  name: "Carousel",
   setup() {
-    const slides = ref([
+    interface Blog {
+      imageUrl: string;
+      title: string;
+      description: string;
+    }
+
+    const blogs = ref<Blog[]>([
       {
-        link: "https://www.kahvedunyasi.com/blog/citir-fontetinli-findik-kremasi-137",
-        src: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/4f359e60bef5cb35eb27456a830a5df0.jpg",
-        alt: "Çıtır Föyetinli Fındık Kreması",
-        title: "Çıtır Föyetinli Fındık Kreması",
-        style: "width: 100%; height: 100%;",
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/cacaonly_410x589_1.jpg",
+        title: "BİZDEN HABERLER",
+        description: "Kakao Meyvesinin Eşsiz Suyunu Denediniz mi? Kahve Dünyası'ndan Türkiye'de Bir İlk: Cacaonly!",
       },
       {
-        link: "https://www.kahvedunyasi.com/blog/kahve-dunyasi-granola-ve-musli-ile-sa%C4%9Fl%C4%B1kli-lezzetler-120",
-        src: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/0b2388191140fd32501ec941876a4f81.jpg",
-        alt: "Kahve Dünyası Granola ve Müsli ile Sağlıklı Lezzetler",
-        title: "Kahve Dünyası Granola ve Müsli ile Sağlıklı Lezzetler",
-        style: "width: 100%; height: 100%;",
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/7046d31ff2d5352f341dbe238a874a1d.jpg",
+        title: "ÇİKOLATA",
+        description: "Kahve Dünyası'ndan türünün ilk ve tek örneği",
       },
       {
-        link: "https://www.kahvedunyasi.com/blog/seker-ilavesiz-beyaz-cikolatali-ve-granolali-muhallebi-84",
-        src: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/0b931b70a50dc41a9dc8fc220b0fcde7.jpg",
-        alt: "Şeker İlavesiz Beyaz Çikolatalı ve Granolalı Muhallebi",
-        title: "Şeker İlavesiz Beyaz Çikolatalı ve Granolalı Muhallebi",
-        style: "width: 100%; height: 100%;",
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/4f359e60bef5cb35eb27456a830a5df0.jpg",
+        title: "BİZDEN HABERLER",
+        description: "Çıtır Föyetinli Fındık Kreması",
+      },
+      {
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/0b2388191140fd32501ec941876a4f81.jpg",
+        title: "TARİF",
+        description: "Kahve Dünyası Granola ve Müsli ile Sağlıklı Lezzetler",
+      },
+      {
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/0b931b70a50dc41a9dc8fc220b0fcde7.jpg",
+        title: "TARİF",
+        description: "Şeker İlevesiz Beyaz Çikolatalı ve Granolalı Muhallebi",
+      },
+      {
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/4e2f7c16725754d99308ef8cdeade6cd.jpg",
+        title: "BİZDEN HABERLER",
+        description: "Kahve Dünyası Algötür Tekne",
+      },
+      {
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/905200ac32f75a79448aba002b9410c6.jpg",
+        title: "TARİF",
+        description: "Colombia Espresso Kapsülü ile Mocha",
+      },
+      {
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/963d4845d78defe8f6b69062d2986d75.jpg",
+        title: "BİZDEN HABERLER",
+        description: "Kahve Dünyası'na en iyi kahve Kategorisi'nde AYD Ödülü",
+      },
+      {
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/164b86673fce4a244c74c5406fc5e92a.jpg",
+        title: "KAHVE",
+        description: "Kahve Keyfinin Tamamlayıcıları: Termos ve Aksesuarlar",
+      },
+      {
+        imageUrl: "https://img-kahvedunyasi.mncdn.com/kahvedunyasi/blog/410x589/796d9f0220ecfa0a140044ad237125d1.jpg",
+        title: "TARİF",
+        description: "Fındık Aromalı Filtre Kahve ile Macchiato",
       },
     ]);
 
-    const currentSlide = ref(0);
-
-    const prevSlide = () => {
-      currentSlide.value =
-        (currentSlide.value - 1 + slides.value.length) % slides.value.length;
-    };
-
-    const nextSlide = () => {
-      currentSlide.value = (currentSlide.value + 1) % slides.value.length;
-    };
+    const currentIndex = ref(0);
 
     const goToSlide = (index: number) => {
-      currentSlide.value = index;
+      currentIndex.value = index;
     };
 
     return {
-      slides,
-      currentSlide,
-      prevSlide,
-      nextSlide,
+      blogs,
+      currentIndex,
       goToSlide,
     };
   },
@@ -91,70 +109,86 @@ export default {
 </script>
 
 <style scoped>
-.carousel-container {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background-color: #f1f1f1;
+.blog-title {
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  font-size: 2.9rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #333;
 }
 
-.carousel {
+.carousel-container {
+  width: 85%;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto; 
+}
+
+.carousel-wrapper {
   display: flex;
   transition: transform 0.5s ease-in-out;
-}
-
-.carousel-slide {
-  min-width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-items: center;
 }
 
 .carousel-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex: 0 0 calc(33.33% - 20px); /* Ekranda 3 resim */
+  margin: 0 10px;
+  position: relative;
 }
 
-.carousel-item img {
-  border-radius: 10px;
-}
-
-.controls {
-  position: absolute;
-  top: 50%;
+.carousel-image {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
+  height: auto;
+  display: block;
+  filter: brightness(0.9);
+  transition: filter 0.3s ease-in-out;
 }
 
-.controls button {
-  background-color: black;
-  color: white;
-  border: none;
-  padding: 20px;
-  cursor: pointer;
-}
-
-.navigation {
+.carousel-content {
   position: absolute;
   bottom: 10px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  left: 10px;
+  color: #fff;
+  padding: 10px;
 }
 
-.navigation span {
+.carousel-title {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+
+.carousel-description {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 100px;
+}
+
+.carousel-link {
+  font-size: 0.9rem;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.dot {
   width: 10px;
   height: 10px;
-  background-color: black;
+  background: #ccc;
   border-radius: 50%;
   margin: 0 5px;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-.navigation .active {
-  background-color: white;
+.dot.active {
+  background: #333;
 }
 </style>

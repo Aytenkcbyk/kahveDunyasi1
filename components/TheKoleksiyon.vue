@@ -33,26 +33,26 @@ export default {
 <style scoped>
 .campaign-section {
   display: flex;
-  justify-content: space-between;
+  justify-items: center; /* Ortalanmış */
   align-items: center;
-  gap: 10px; /* Kampanyalar arası boşluk */
-  padding: 10px;
+  gap: 60px; /* Kampanyalar arasındaki boşluk azaltıldı */
+  padding: 90px;
 }
 
 .campaign {
   flex: 1;
+  display: flex;
+  justify-items: center; /* İçeriği ortaladı */
 }
 
 .campaign-image {
-  width: 100%;
+  width: 120%; /* Boyut biraz daha büyütüldü */
   height: auto;
   display: block;
-  border-radius: 8px; /* Köşe yuvarlatma */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-  transition: transform 0.2s ease-in-out; /* Hover animasyonu */
+  box-shadow: none; /* Gölgeleme kaldırıldı */
 }
 
 .campaign-image:hover {
-  transform: scale(1.05); /* Hover büyütme efekti */
+  transform: none; /* Hover efekti kaldırıldı */
 }
 </style>
